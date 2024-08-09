@@ -76,6 +76,7 @@ func update_health_bar(health_value):
 	#update_leaderboard.rpc(playerkill)
 	print(playerkill, " killed you hahaha")
 
+#its like commit test
 #big stroke
 #LEADERBOARD AAAAAAAJJJJHHHH
 #@rpc("any_peer", "call_local") func update_leaderboard(killername):
