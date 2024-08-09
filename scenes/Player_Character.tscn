@@ -1,0 +1,105 @@
+[gd_scene load_steps=10 format=3 uid="uid://brbcmknkw80lv"]
+
+[ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
+[ext_resource type="AudioStream" uid="uid://bfuuoetrx2pig" path="res://assets/sfx/Gunshot.mp3" id="3_r7cwy"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qimpw"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_u7a6u"]
+radius = 0.025
+height = 0.05
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bfwkd"]
+lifetime_randomness = 0.5
+direction = Vector3(0, 1, 0)
+initial_velocity_max = 25.0
+gravity = Vector3(0, -10, 0)
+linear_accel_max = 10.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ujiom"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_jellc"]
+material = SubResource("StandardMaterial3D_ujiom")
+radius = 0.05
+height = 0.1
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fgofl"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tji4a"]
+
+[node name="PlayerCharacter" type="CharacterBody3D" groups=["Damageable", "Player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2136, 0)
+collision_mask = 3
+floor_stop_on_slope = false
+script = ExtResource("1_n40ya")
+default_damage = 100
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+fov = 90.0
+
+[node name="Gun" type="Node3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.457724, -0.504079, -0.46532)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Camera3D/Gun"]
+transform = Transform3D(0.074332, 0, 0, 0, 0.276151, 0, 0, 0, 0.859702, 0, 0, 0)
+mesh = SubResource("BoxMesh_qimpw")
+skeleton = NodePath("../../..")
+
+[node name="CPUParticles3D" type="CPUParticles3D" parent="Camera3D/Gun"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.443266)
+emitting = false
+amount = 24
+lifetime = 2.0
+one_shot = true
+explosiveness = 1.0
+mesh = SubResource("SphereMesh_u7a6u")
+direction = Vector3(0, 0, -1)
+spread = 25.0
+gravity = Vector3(0, -4.5, 0)
+initial_velocity_max = 20.0
+
+[node name="GunAudioPlayer" type="AudioStreamPlayer3D" parent="Camera3D/Gun"]
+stream = ExtResource("3_r7cwy")
+volume_db = -40.0
+unit_size = 40.0
+max_db = 6.0
+max_distance = 1000.0
+
+[node name="DeathParticleEmitter" type="GPUParticles3D" parent="."]
+emitting = false
+amount = 80
+one_shot = true
+speed_scale = 0.8
+explosiveness = 1.0
+process_material = SubResource("ParticleProcessMaterial_bfwkd")
+draw_pass_1 = SubResource("SphereMesh_jellc")
+
+[node name="HealthRegenTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 5.0
+one_shot = true
+
+[node name="HealthRegenTick" type="Timer" parent="."]
+process_callback = 0
+
+[node name="TickTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.01
+autostart = true
+
+[node name="RespawnTimer" type="Timer" parent="."]
+wait_time = 5.0
+one_shot = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_fgofl")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_tji4a")
+
+[connection signal="timeout" from="HealthRegenTimer" to="." method="_on_health_regen_timer_timeout"]
+[connection signal="timeout" from="HealthRegenTick" to="." method="_on_health_regen_tick_timeout"]
+[connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
+[connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]

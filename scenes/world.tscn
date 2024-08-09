@@ -1,0 +1,215 @@
+[gd_scene load_steps=19 format=3 uid="uid://bjtrahwriq4km"]
+
+[ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_4i3cb"]
+[ext_resource type="Texture2D" uid="uid://dlh2pf8lf1hak" path="res://assets/sprites/moonrocks/lunar-rock-albedo.png" id="2_mrli8"]
+[ext_resource type="PackedScene" uid="uid://brbcmknkw80lv" path="res://scenes/Player_Character.tscn" id="2_o05xg"]
+[ext_resource type="Texture2D" uid="uid://4miqwfgjmdfu" path="res://assets/sprites/moonrocks/lunar-rock-ao.png" id="3_0vklp"]
+[ext_resource type="PackedScene" uid="uid://2hwx54weg2qn" path="res://scenes/Health_pickup_node.tscn" id="3_a5dwa"]
+[ext_resource type="Texture2D" uid="uid://dbw0tipxi5nuw" path="res://assets/sprites/moonrocks/lunar-rock-height-u.png" id="4_e5qxs"]
+[ext_resource type="Texture2D" uid="uid://dcq1djo3cf5fl" path="res://assets/sprites/moonrocks/lunar-rock-normal-u.png" id="5_g61lp"]
+[ext_resource type="Texture2D" uid="uid://brrwm35nibcdh" path="res://assets/sprites/stars.png" id="6_hry7q"]
+[ext_resource type="PackedScene" uid="uid://bx70eeevo8yox" path="res://scenes/player_spawn.tscn" id="9_amu1e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62x75"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0imy"]
+albedo_texture = ExtResource("2_mrli8")
+normal_enabled = true
+normal_texture = ExtResource("5_g61lp")
+ao_enabled = true
+ao_texture = ExtResource("3_0vklp")
+heightmap_enabled = true
+heightmap_texture = ExtResource("4_e5qxs")
+uv1_scale = Vector3(20, 20, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fjlom"]
+material = SubResource("StandardMaterial3D_n0imy")
+size = Vector3(100, 1, 100)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lmlmv"]
+panorama = ExtResource("6_hry7q")
+
+[sub_resource type="Sky" id="Sky_3hl57"]
+sky_material = SubResource("PanoramaSkyMaterial_lmlmv")
+process_mode = 1
+
+[sub_resource type="Environment" id="Environment_nojys"]
+background_mode = 2
+sky = SubResource("Sky_3hl57")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.1
+sdfgi_enabled = true
+volumetric_fog_density = 0.02
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iueai"]
+bg_color = Color(0.36, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_giqg5"]
+font_size = 40
+font_color = Color(1, 0.21, 0.21, 1)
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vlfxd"]
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_4i3cb")
+player_spawner = ExtResource("9_amu1e")
+player_scene = ExtResource("2_o05xg")
+
+[node name="Players" type="Node3D" parent="."]
+
+[node name="Funnymap" type="Node3D" parent="."]
+
+[node name="Pickups" type="Node3D" parent="Funnymap"]
+
+[node name="HealthPickupNode" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Funnymap"]
+transform = Transform3D(1, 0, 0, 0, -0.173648, 0.984808, 0, -0.984808, -0.173648, 0, 27.6717, 0)
+light_angular_distance = 0.5
+shadow_enabled = true
+
+[node name="Floor" type="StaticBody3D" parent="Funnymap"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Floor"]
+shape = SubResource("BoxShape3D_62x75")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Floor"]
+mesh = SubResource("BoxMesh_fjlom")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="Funnymap"]
+environment = SubResource("Environment_nojys")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 180.0
+offset_top = 120.0
+offset_right = -180.0
+offset_bottom = -220.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+metadata/_edit_use_anchors_ = true
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "join"
+
+[node name="AdressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "localhost"
+placeholder_text = "Enter adress here"
+alignment = 1
+
+[node name="GUI" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="HealthBar" type="ProgressBar" parent="CanvasLayer/GUI"]
+z_index = 100
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -102.0
+offset_top = -30.0
+offset_right = 102.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+tooltip_text = "
+"
+theme_override_styles/fill = SubResource("StyleBoxFlat_iueai")
+max_value = 200.0
+step = 1.0
+value = 200.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="CanvasLayer/GUI/HealthBar"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.5
+offset_top = -11.5
+offset_right = 30.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "Healthe"
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer/GUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DeadText" type="Label" parent="CanvasLayer/GUI/CenterContainer"]
+visible = false
+layout_mode = 2
+text = "YOU ARE DEAD RAAAHHH!!!!!"
+label_settings = SubResource("LabelSettings_giqg5")
+
+[node name="FlickerTimer" type="Timer" parent="CanvasLayer/GUI/CenterContainer/DeadText"]
+wait_time = 0.5
+
+[node name="Crosshair" type="TextureRect" parent="CanvasLayer/GUI/CenterContainer"]
+custom_minimum_size = Vector2(5, 5)
+layout_mode = 2
+texture = SubResource("PlaceholderTexture2D_vlfxd")
+stretch_mode = 5
+
+[node name="Leaderboard" type="MarginContainer" parent="CanvasLayer/GUI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LeaderboardV" type="VBoxContainer" parent="CanvasLayer/GUI/Leaderboard"]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/Player_Character.tscn")
+spawn_path = NodePath("../Players")
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/hostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
+[connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]

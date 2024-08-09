@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://2hwx54weg2qn"]
+
+[ext_resource type="Script" path="res://scripts/Health_pickup_manager.gd" id="1_alkok"]
+
+[node name="HealthPickupNode" type="Node3D" groups=["Pickup"]]
+script = ExtResource("1_alkok")
+
+[node name="Timer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 5.0
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

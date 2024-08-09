@@ -1,0 +1,116 @@
+[gd_scene load_steps=14 format=3 uid="uid://bjtrahwriq4km"]
+
+[ext_resource type="Script" path="res://Game.gd" id="1_4i3cb"]
+[ext_resource type="Texture2D" uid="uid://dlh2pf8lf1hak" path="res://assets/moonrocks/lunar-rock-albedo.png" id="2_mrli8"]
+[ext_resource type="Texture2D" uid="uid://4miqwfgjmdfu" path="res://assets/moonrocks/lunar-rock-ao.png" id="3_0vklp"]
+[ext_resource type="Texture2D" uid="uid://dbw0tipxi5nuw" path="res://assets/moonrocks/lunar-rock-height-u.png" id="4_e5qxs"]
+[ext_resource type="Texture2D" uid="uid://dcq1djo3cf5fl" path="res://assets/moonrocks/lunar-rock-normal-u.png" id="5_g61lp"]
+[ext_resource type="Texture2D" uid="uid://brrwm35nibcdh" path="res://assets/stars.png" id="6_hry7q"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_1udeg"]
+properties/0/path = NodePath("PlayerCharacter:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("PlayerCharacter:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+properties/2/path = NodePath("PlayerCharacter:scale")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lmlmv"]
+panorama = ExtResource("6_hry7q")
+
+[sub_resource type="Sky" id="Sky_3hl57"]
+sky_material = SubResource("PanoramaSkyMaterial_lmlmv")
+
+[sub_resource type="Environment" id="Environment_nojys"]
+background_mode = 2
+sky = SubResource("Sky_3hl57")
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_energy = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62x75"]
+size = Vector3(100, 1, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n0imy"]
+albedo_texture = ExtResource("2_mrli8")
+normal_enabled = true
+normal_texture = ExtResource("5_g61lp")
+ao_enabled = true
+ao_texture = ExtResource("3_0vklp")
+heightmap_enabled = true
+heightmap_texture = ExtResource("4_e5qxs")
+uv1_scale = Vector3(20, 20, 20)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fjlom"]
+material = SubResource("StandardMaterial3D_n0imy")
+size = Vector3(100, 1, 100)
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_4i3cb")
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://Player_Character.tscn")
+spawn_path = NodePath("..")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_1udeg")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nojys")
+
+[node name="Floor" type="StaticBody3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+shape = SubResource("BoxShape3D_62x75")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
+mesh = SubResource("BoxMesh_fjlom")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 598.0
+offset_top = 400.0
+offset_right = -598.0
+offset_bottom = -400.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/MainMenu"]
+layout_mode = 2
+theme_override_constants/margin_left = 15
+theme_override_constants/margin_top = 15
+theme_override_constants/margin_right = 15
+theme_override_constants/margin_bottom = 15
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/MainMenu/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Main Menu"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="hostButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "host"
+
+[node name="JoinButton" type="Button" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "join"
+
+[node name="AdressEntry" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Enter adress here"
+alignment = 1
+
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/hostButton" to="." method="_on_host_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
