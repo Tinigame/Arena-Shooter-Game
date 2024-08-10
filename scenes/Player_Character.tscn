@@ -91,7 +91,7 @@ autostart = true
 
 [node name="RespawnTimer" type="Timer" parent="."]
 process_callback = 0
-wait_time = 2.0
+wait_time = 5.0
 one_shot = true
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

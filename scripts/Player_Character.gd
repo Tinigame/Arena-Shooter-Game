@@ -23,18 +23,17 @@ var eDelta = 0
 var gravity = 20.0
 var can_shoot = true
 var killer_id = "no-one"
-var self_id
+var killcount = 0
 @export var shooting_delay = 0.8
 @export var default_damage : int = 50
 @export var regenerated_health : int = 10
-@export var health = 200
+@export var health : int = 200
 
 signal health_changed(health_value)
 signal player_died
 signal player_respawned
+signal startgame
 
-func set_self_id(id):
-	self_id = id
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 func _ready():
@@ -63,6 +62,7 @@ func _physics_process(delta):
 				shoot()
 				await get_tree().create_timer(shooting_delay).timeout
 				can_shoot = true
+				emit_signal("startgame")
 		#Movement and camera rotation
 		if not is_on_floor():
 			velocity.y -= gravity * delta
@@ -120,6 +120,10 @@ func apply_recoil(delta):
 @rpc("any_peer") func recieve_damage(damage_amount):
 	#print_debug(killer_id, " shot me owie for ", damage_amount, " damage")
 	health = health - damage_amount
+	if health > 200:
+		health = 200
+	if health < 0:
+		health = 0
 	health_changed.emit(health)
 	taken_damage = true
 	health_regen_tick.autostart = true
@@ -176,6 +180,7 @@ func _on_health_regen_tick_timeout():
 
 
 @rpc("call_local") func _on_respawn_timer_timeout():
-	print_debug(self_id)
 	deadstatus = false
-	player_respawned.emit(self_id)
+	position = Vector3(1 * randi_range(-40,40), 4, 1 * randi_range(-40,40))
+	player_respawned.emit()
+	recieve_damage(-300000)
