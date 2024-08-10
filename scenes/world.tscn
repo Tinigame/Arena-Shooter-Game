@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://bjtrahwriq4km"]
+[gd_scene load_steps=21 format=3 uid="uid://bjtrahwriq4km"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_4i3cb"]
 [ext_resource type="Texture2D" uid="uid://dlh2pf8lf1hak" path="res://assets/sprites/moonrocks/lunar-rock-albedo.png" id="2_mrli8"]
@@ -43,6 +43,10 @@ ambient_light_energy = 0.1
 sdfgi_enabled = true
 volumetric_fog_density = 0.02
 
+[sub_resource type="BoxMesh" id="BoxMesh_rfc4f"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_o2gw8"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iueai"]
 bg_color = Color(0.36, 0, 0, 1)
 
@@ -64,7 +68,19 @@ player_scene = ExtResource("2_o05xg")
 [node name="Pickups" type="Node3D" parent="Funnymap"]
 
 [node name="HealthPickupNode" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 0, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.6329, 10.0039, 25.3438)
+
+[node name="HealthPickupNode2" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -19.241, 14.9946, 18.8205)
+
+[node name="HealthPickupNode3" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.48349, 6.99069, -18.3248)
+
+[node name="HealthPickupNode4" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24.9855, 10.3411, -1.12368)
+
+[node name="HealthPickupNode5" parent="Funnymap/Pickups" instance=ExtResource("3_a5dwa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4763, 15.9796, -27.8728)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Funnymap"]
 transform = Transform3D(1, 0, 0, 0, -0.173648, 0.984808, 0, -0.984808, -0.173648, 0, 27.6717, 0)
@@ -81,6 +97,60 @@ mesh = SubResource("BoxMesh_fjlom")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Funnymap"]
 environment = SubResource("Environment_nojys")
+
+[node name="DIngleobject2" type="StaticBody3D" parent="Funnymap"]
+transform = Transform3D(7.01424, 0, 4.26332, 0, 17.8665, 0, -3.68084, 0, 8.12422, -18.9229, 5.41943, 17.4516)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject2"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject2"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject" type="StaticBody3D" parent="Funnymap/DIngleobject2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.865844, -0.303329, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject2/DIngleobject"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject2/DIngleobject"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject3" type="StaticBody3D" parent="Funnymap"]
+transform = Transform3D(6.96578, 0, -4.3686, -1.57088, 16.2432, -3.36026, 3.42904, 7.44118, 7.33505, -11.8164, 5.38844, -29.1979)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject3"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject3"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject4" type="StaticBody3D" parent="Funnymap"]
+transform = Transform3D(7.48216, 0, 3.01263, 0, 17.8665, 0, -2.60103, 0, 8.66619, 5.09749, -3.19417, -18.2938)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject4"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject4"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject5" type="StaticBody3D" parent="Funnymap"]
+transform = Transform3D(5.6121, 0, -6.47506, 0, 17.8665, 0, 5.59039, 0, 6.50019, 27.0521, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject5"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject5"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject6" type="StaticBody3D" parent="Funnymap"]
+transform = Transform3D(0.947804, 0, 9.10899, 0, 17.8665, 0, -7.86446, 0, 1.09779, 16.2794, 0, 25.0093)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/DIngleobject6"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/DIngleobject6"]
+shape = SubResource("BoxShape3D_o2gw8")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
