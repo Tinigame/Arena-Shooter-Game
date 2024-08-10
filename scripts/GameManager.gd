@@ -6,7 +6,6 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AdressEntry
 @onready var players = $Players
 @onready var dead_text = $CanvasLayer/GUI/CenterContainer/DeadText
-@onready var flicker_timer = $CanvasLayer/GUI/CenterContainer/DeadText/FlickerTimer
 @onready var leaderboard_v = $CanvasLayer/GUI/Leaderboard/LeaderboardV
 @onready var funnymap = $Funnymap
 
@@ -17,9 +16,6 @@ var player_spawner_node
 var Leaderboard = {}
 var port = 25566
 var peer = ENetMultiplayerPeer.new()
-
-func _ready():
-	gui.hide()
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):
@@ -52,6 +48,7 @@ func add_player(id = 1):
 	
 	var player = player_scene.instantiate()
 	player.name = str(id) 
+	player.set_self_id(id)
 	player.position = player_spawner_node.position
 	players.add_child(player)
 	if player.is_multiplayer_authority():
@@ -64,7 +61,6 @@ func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_health_bar)
 		node.player_died.connect(kill_player)
-		node.player_respawned.connect(respawn_player)
 
 func update_health_bar(health_value):
 	clampi(health_value, 0, 200)
@@ -76,6 +72,11 @@ func update_health_bar(health_value):
 	#update_leaderboard.rpc(playerkill)
 	print(playerkill, " killed you hahaha")
 
+@rpc("any_peer", "call_local") func del_player(id):
+	var player = get_node_or_null(str(id))
+	if player:
+		player.queue_free()
+	
 #its like commit test
 #big stroke
 #LEADERBOARD AAAAAAAJJJJHHHH
@@ -86,13 +87,3 @@ func update_health_bar(health_value):
 		#leaderboard_v.add_child(pLabel)
 		#pLabel.text = str("Player ", str(Leaderboard[playe]), ": ", Leaderboard[playe])
 	#Leaderboard[killername] += 1
-
-@rpc("any_peer", "call_local") func respawn_player(id):
-	
-	dead_text.hide()
-	players.get_node(id).position = player_spawner_node.position
-
-@rpc("any_peer", "call_local") func del_player(id):
-	var player = get_node_or_null(str(id))
-	if player:
-		player.queue_free()

@@ -126,6 +126,7 @@ placeholder_text = "Enter adress here"
 alignment = 1
 
 [node name="GUI" type="Control" parent="CanvasLayer"]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -187,9 +188,6 @@ visible = false
 layout_mode = 2
 text = "YOU ARE DEAD RAAAHHH!!!!!"
 label_settings = SubResource("LabelSettings_giqg5")
-
-[node name="FlickerTimer" type="Timer" parent="CanvasLayer/GUI/CenterContainer/DeadText"]
-wait_time = 0.5
 
 [node name="Crosshair" type="TextureRect" parent="CanvasLayer/GUI/CenterContainer"]
 custom_minimum_size = Vector2(5, 5)

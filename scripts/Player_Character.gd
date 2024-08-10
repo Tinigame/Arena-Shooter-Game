@@ -23,6 +23,7 @@ var eDelta = 0
 var gravity = 20.0
 var can_shoot = true
 var killer_id = "no-one"
+var self_id
 @export var shooting_delay = 0.8
 @export var default_damage : int = 50
 @export var regenerated_health : int = 10
@@ -32,6 +33,8 @@ signal health_changed(health_value)
 signal player_died
 signal player_respawned
 
+func set_self_id(id):
+	self_id = id
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
 func _ready():
@@ -172,7 +175,7 @@ func _on_health_regen_tick_timeout():
 		regenerate_health()
 
 
-func _on_respawn_timer_timeout():
-	var id = self.name
+@rpc("call_local") func _on_respawn_timer_timeout():
+	print_debug(self_id)
 	deadstatus = false
-	player_respawned.emit(id)
+	player_respawned.emit(self_id)
