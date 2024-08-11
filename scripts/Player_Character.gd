@@ -171,6 +171,8 @@ func picked_up_health():
 	var player_id = str(self.name)
 	player_died.emit(player_id)
 	respawn_timer.start()
+	await respawn_timer.timeout
+	remove_child(gunragdoll)
 
 @rpc("unreliable", "any_peer", "call_local") func updatePos(id, pos):
 	if !is_multiplayer_authority():
