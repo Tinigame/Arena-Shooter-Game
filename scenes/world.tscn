@@ -39,7 +39,6 @@ sky = SubResource("Sky_3hl57")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.1
-sdfgi_enabled = true
 volumetric_fog_density = 0.02
 
 [sub_resource type="BoxMesh" id="BoxMesh_rfc4f"]
@@ -87,9 +86,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.4763, 11.6567, -27.8728)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Funnymap"]
 transform = Transform3D(1, 0, 0, 0, -0.173648, 0.984808, 0, -0.984808, -0.173648, 0, 27.6717, 0)
-light_angular_distance = 0.5
 shadow_enabled = true
-shadow_opacity = 0.95
+directional_shadow_blend_splits = true
 
 [node name="Floor" type="StaticBody3D" parent="Funnymap"]
 
@@ -183,13 +181,15 @@ shape = SubResource("BoxShape3D_6wvgb")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 180.0
-offset_top = 120.0
-offset_right = -180.0
-offset_bottom = -220.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -65.5
+offset_right = 44.0
+offset_bottom = 65.5
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
@@ -243,9 +243,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -102.0
-offset_top = -30.0
-offset_right = 102.0
+offset_left = -204.0
+offset_top = -60.0
+offset_right = 204.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4

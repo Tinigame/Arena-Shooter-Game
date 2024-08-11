@@ -164,12 +164,9 @@ spread = 20.0
 initial_velocity_max = 400.0
 linear_accel_max = 10.0
 
-[node name="GunAudioPlayer" type="AudioStreamPlayer3D" parent="Camera3D/Gun"]
+[node name="GunAudioPlayer" type="AudioStreamPlayer" parent="Camera3D/Gun"]
 stream = ExtResource("3_r7cwy")
-volume_db = -40.0
-unit_size = 40.0
-max_db = 6.0
-max_distance = 1000.0
+volume_db = -10.0
 
 [node name="GunAnimationPlayer" type="AnimationPlayer" parent="Camera3D/Gun"]
 libraries = {

@@ -9,6 +9,7 @@ extends CharacterBody3D
 @onready var player_collision_shape = $CollisionShape3D
 @onready var respawn_timer = $RespawnTimer
 @onready var gun_anim_player = $Camera3D/Gun/GunAnimationPlayer
+@onready var gunmesh = $Camera3D/Gun/Gunmesh
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 5.0 # Adjust this value to get the desired recoil effect
@@ -154,6 +155,7 @@ func picked_up_health():
 	recieve_damage(healamount)
 
 @rpc("any_peer", "call_local") func deathfuncer():
+	gunmesh.hide()
 	death_particle_emitter.restart()
 	death_particle_emitter.emitting = true
 	health_regen_tick.autostart = false
@@ -192,6 +194,7 @@ func _on_health_regen_tick_timeout():
 
 @rpc("call_local") func _on_respawn_timer_timeout():
 	deadstatus = false
+	gunmesh.show()
 	position = Vector3(1 * randi_range(-40,40), 4, 1 * randi_range(-40,40))
 	player_respawned.emit()
 	recieve_damage(-300000)

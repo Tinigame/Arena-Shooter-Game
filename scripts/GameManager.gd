@@ -63,7 +63,6 @@ func _on_multiplayer_spawner_spawned(node):
 	if node.is_multiplayer_authority():
 		node.health_changed.connect(update_health_bar)
 		node.player_died.connect(kill_player)
-		node.startgame.connect(start_game)
 
 func update_health_bar(health_value):
 	clampi(health_value, 0, 200)
@@ -74,9 +73,8 @@ func update_health_bar(health_value):
 	var playerkill = players.get_node(id).killer_id
 	print(playerkill, " killed you hahaha")
 	
-	#Leaderboard[playerkill] += 1
-	#update_leaderboard.rpc()
-	#print(Leaderboard)
+	Leaderboard[playerkill] += 1
+	print(Leaderboard)
 	
 	await get_tree().create_timer(5).timeout
 	dead_text.hide()
@@ -85,31 +83,3 @@ func update_health_bar(health_value):
 	var player = get_node_or_null(str(id))
 	if player:
 		player.queue_free()
-
-func start_game():
-	gamestarted = true
-	#add_to_leaderboard.rpc()
-
-@rpc("any_peer", "call_local") func add_to_leaderboard():
-	if gamestarted == false: 
-		return
-	if leaderboarmade == true:
-		return
-	var playernum = players.get_child_count()
-	print(playernum)
-	while playernum > 0:
-		var playername = players.get_child(1).name
-		var pLabel = Label.new()
-		pLabel.name = str(playername)
-		leaderboard_v.add_child(pLabel)
-		playernum -= 1
-	leaderboarmade = true
-
-@rpc("any_peer", "call_local") func update_leaderboard():
-	var playernum = players.get_child_count()
-	while playernum > -1:
-		var playername = players.get_child(playernum-1).name
-		var currentLabel = get_node(str("CanvasLayer/GUI/Leaderboard/LeaderboardV/", playername))
-		var currentkills = Leaderboard[playername]
-		currentLabel.text = str(playername, " kills: ", currentkills)
-		playernum -= 1
