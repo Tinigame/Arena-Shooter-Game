@@ -1,6 +1,7 @@
-[gd_scene load_steps=16 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=17 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
+[ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
 [ext_resource type="ArrayMesh" uid="uid://dodmnuopjr2xl" path="res://assets/models/gun.obj" id="2_t2add"]
 [ext_resource type="AudioStream" uid="uid://bfuuoetrx2pig" path="res://assets/sfx/Gunshot.mp3" id="3_r7cwy"]
 
@@ -138,6 +139,7 @@ collision_mask = 3
 floor_stop_on_slope = false
 script = ExtResource("1_n40ya")
 shooting_delay = 1.0
+gunragdollscene = ExtResource("2_lslbb")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)

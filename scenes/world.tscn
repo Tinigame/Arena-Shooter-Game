@@ -293,15 +293,6 @@ layout_mode = 2
 texture = SubResource("PlaceholderTexture2D_vlfxd")
 stretch_mode = 5
 
-[node name="Leaderboard" type="MarginContainer" parent="CanvasLayer/GUI"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LeaderboardV" type="VBoxContainer" parent="CanvasLayer/GUI/Leaderboard"]
-layout_mode = 2
-size_flags_vertical = 0
-
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/Player_Character.tscn")
 spawn_path = NodePath("../Players")

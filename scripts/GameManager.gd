@@ -6,7 +6,6 @@ extends Node
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AdressEntry
 @onready var players = $Players
 @onready var dead_text = $CanvasLayer/GUI/CenterContainer/DeadText
-@onready var leaderboard_v = $CanvasLayer/GUI/Leaderboard/LeaderboardV
 @onready var funnymap = $Funnymap
 
 @export var player_spawner : PackedScene
@@ -74,7 +73,7 @@ func update_health_bar(health_value):
 	print(playerkill, " killed you hahaha")
 	
 	Leaderboard[playerkill] += 1
-	print(Leaderboard)
+	print(Leaderboard, " le leaderboarder")
 	
 	await get_tree().create_timer(5).timeout
 	dead_text.hide()

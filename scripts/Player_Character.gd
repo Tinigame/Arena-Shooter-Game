@@ -31,6 +31,8 @@ var killcount = 0
 @export var regenerated_health : int = 10
 @export var health : int = 200
 
+@export var gunragdollscene : PackedScene
+
 signal health_changed(health_value)
 signal player_died
 signal player_respawned
@@ -156,6 +158,11 @@ func picked_up_health():
 
 @rpc("any_peer", "call_local") func deathfuncer():
 	gunmesh.hide()
+	
+	var gunragdoll = gunragdollscene.instantiate()
+	gunragdoll.position = gunmesh.position
+	add_child(gunragdoll)
+	
 	death_particle_emitter.restart()
 	death_particle_emitter.emitting = true
 	health_regen_tick.autostart = false
