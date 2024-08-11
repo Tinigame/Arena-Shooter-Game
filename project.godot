@@ -17,10 +17,10 @@ config/icon="res://assets/sprites/game-icon.png"
 
 [display]
 
-window/size/viewport_width=720
-window/size/viewport_height=480
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=4
 window/size/resizable=false
-window/size/always_on_top=true
 
 [dotnet]
 
@@ -103,7 +103,19 @@ Mouse1={
 
 [rendering]
 
-anti_aliasing/quality/msaa_3d=1
+lights_and_shadows/directional_shadow/size=16384
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality=5
+lights_and_shadows/directional_shadow/soft_shadow_filter_quality.mobile=5
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality=5
+lights_and_shadows/positional_shadow/soft_shadow_filter_quality.mobile=5
+environment/ssao/quality=3
+anti_aliasing/quality/msaa_2d=3
+anti_aliasing/quality/msaa_3d=3
+anti_aliasing/quality/use_taa=true
+lights_and_shadows/positional_shadow/atlas_size=16384
+lights_and_shadows/positional_shadow/atlas_quadrant_1_subdiv=3
+lights_and_shadows/positional_shadow/atlas_quadrant_2_subdiv=4
+lights_and_shadows/positional_shadow/atlas_quadrant_3_subdiv=5
 
 [text_editor]
 

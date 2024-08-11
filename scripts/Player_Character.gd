@@ -1,13 +1,14 @@
 extends CharacterBody3D
 
 @onready var camera = $Camera3D
-@onready var gun_particles = $Camera3D/Gun/CPUParticles3D
+@onready var gun_particles = $Camera3D/Gun/Gunmesh/CPUParticles3D
 @onready var death_particle_emitter = $DeathParticleEmitter
 @onready var gun_audio_player = $Camera3D/Gun/GunAudioPlayer
 @onready var health_regen_timer = $HealthRegenTimer
 @onready var health_regen_tick = $HealthRegenTick
 @onready var player_collision_shape = $CollisionShape3D
 @onready var respawn_timer = $RespawnTimer
+@onready var gun_anim_player = $Camera3D/Gun/GunAnimationPlayer
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 5.0 # Adjust this value to get the desired recoil effect
@@ -77,6 +78,14 @@ func _physics_process(delta):
 			velocity.x = move_toward(velocity.x, 0, move_speed)
 			velocity.z = move_toward(velocity.z, 0, move_speed)
 		velocity = velocity + current_recoil_velocity
+		
+		if gun_anim_player.current_animation == "shoot_gun":
+			pass
+		elif input_dir != Vector2.ZERO and is_on_floor():
+			gun_anim_player.play("Walk_gun")
+		else:
+			gun_anim_player.play("Idle_gun")
+		
 		move_and_slide()
 
 
@@ -114,6 +123,8 @@ func apply_recoil(delta):
 		current_recoil_velocity = current_recoil_velocity.lerp(Vector3.ZERO, recoil_decay * delta)
 
 @rpc("unreliable", "call_local") func guneffects():
+	gun_anim_player.stop()
+	gun_anim_player.play("shoot_gun")
 	gun_particles.restart()
 	gun_particles.emitting = true
 	

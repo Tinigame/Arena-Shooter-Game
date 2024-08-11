@@ -77,6 +77,7 @@ func update_health_bar(health_value):
 	#Leaderboard[playerkill] += 1
 	#update_leaderboard.rpc()
 	#print(Leaderboard)
+	
 	await get_tree().create_timer(5).timeout
 	dead_text.hide()
 
@@ -89,21 +90,20 @@ func start_game():
 	gamestarted = true
 	#add_to_leaderboard.rpc()
 
-#@rpc("any_peer", "call_local") func add_to_leaderboard():
-	#if gamestarted == false: 
-		#return
-	#if leaderboarmade == true:
-		#return
-	#var playernum = players.get_child_count()
-	#print(playernum)
-	#while playernum > 0:
-		#var playername = players.get_child(1).name
-		#var pLabel = Label.new()
-		#pLabel.name = str(playername)
-		#leaderboard_v.add_child(pLabel)
-		#playernum -= 1
-	#print_tree_pretty()
-	#leaderboarmade = true
+@rpc("any_peer", "call_local") func add_to_leaderboard():
+	if gamestarted == false: 
+		return
+	if leaderboarmade == true:
+		return
+	var playernum = players.get_child_count()
+	print(playernum)
+	while playernum > 0:
+		var playername = players.get_child(1).name
+		var pLabel = Label.new()
+		pLabel.name = str(playername)
+		leaderboard_v.add_child(pLabel)
+		playernum -= 1
+	leaderboarmade = true
 
 @rpc("any_peer", "call_local") func update_leaderboard():
 	var playernum = players.get_child_count()

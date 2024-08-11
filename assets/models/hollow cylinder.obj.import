@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://vx23nir362ph"
+path="res://.godot/imported/hollow cylinder.obj-19d28d1e6543d3bb5e63e795d08d2c3d.mesh"
+
+[deps]
+
+files=["res://.godot/imported/hollow cylinder.obj-19d28d1e6543d3bb5e63e795d08d2c3d.mesh"]
+
+source_file="res://assets/models/hollow cylinder.obj"
+dest_files=["res://.godot/imported/hollow cylinder.obj-19d28d1e6543d3bb5e63e795d08d2c3d.mesh", "res://.godot/imported/hollow cylinder.obj-19d28d1e6543d3bb5e63e795d08d2c3d.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=false
+force_disable_mesh_compression=true
