@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://d4kr6ju87v02h"]
+[gd_scene load_steps=7 format=3 uid="uid://d4kr6ju87v02h"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_xs6ts"]
 
@@ -18,6 +18,19 @@ properties/3/path = NodePath(".:angular_velocity")
 properties/3/spawn = true
 properties/3/replication_mode = 1
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_pxr1i"]
+lifetime_randomness = 0.5
+emission_shape = 1
+emission_sphere_radius = 0.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qpatr"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_s1o6o"]
+material = SubResource("StandardMaterial3D_qpatr")
+radius = 0.05
+height = 0.1
+
 [node name="Playerragdoll" type="RigidBody3D"]
 disable_mode = 2
 collision_layer = 4
@@ -32,3 +45,11 @@ mesh = SubResource("CapsuleMesh_gbnsa")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_brmnp")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
+amount = 256
+lifetime = 8.0
+fixed_fps = 0
+collision_base_size = 1.0
+process_material = SubResource("ParticleProcessMaterial_pxr1i")
+draw_pass_1 = SubResource("SphereMesh_s1o6o")
