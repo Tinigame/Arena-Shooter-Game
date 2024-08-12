@@ -11,6 +11,8 @@ extends CharacterBody3D
 @onready var gun_anim_player = $Camera3D/Gun/GunAnimationPlayer
 @onready var gunmesh = $Camera3D/Gun/Gunmesh
 @onready var playermesh = $Playermesh
+@onready var tp_reset_timer = $TPResetTimer
+@onready var walljumpcollider = $Camera3D/Walljumpcollider
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 5.0 # Adjust this value to get the desired recoil effect
@@ -20,14 +22,17 @@ var recoil_decay = 20.0 # How quickly the recoil force decays
 var recieved_damage = 0
 var move_speed = 10.0
 var jump_vel = 10.0
+var wall_jump_vel = 12.0
 var deadstatus = false
 var taken_damage = false
 var eDelta = 0
 var gravity = 20.0
 var can_shoot = true
+var hasteleported = false
 var killer_id = "no-one"
 var killcount = 0
 var jumpcount = 1
+var walljumpcounter = 0
 @export var shooting_delay = 0.8
 @export var default_damage : int = 50
 @export var regenerated_health : int = 10
@@ -40,6 +45,7 @@ signal health_changed(health_value)
 signal player_died
 signal player_respawned
 signal startgame
+signal teleported
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -73,11 +79,21 @@ func _physics_process(delta):
 		#Movement and camera rotation
 		if not is_on_floor():
 			velocity.y -= gravity * delta
-		if Input.is_action_just_pressed("space") and jumpcount > 0:
+		if Input.is_action_just_pressed("space") and jumpcount > 0 and !walljumpcollider.is_colliding():
 			velocity.y = jump_vel
 			jumpcount -= 1
+		if Input.is_action_just_pressed("space"):
+			walljump()
+			
+		if Input.is_action_just_pressed("dashleft"):
+			teleport(Vector3.LEFT)
+		if Input.is_action_just_pressed("dashright"):
+			teleport(Vector3.RIGHT)
+			
+			
 		if is_on_floor():
 			jumpcount = 1
+			walljumpcounter = 0
 		var input_dir = Input.get_vector("pleft", "plright", "plup", "pldown")
 		var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		if direction:
@@ -91,6 +107,22 @@ func _physics_process(delta):
 		playeranimator.rpc(input_dir)
 		
 		move_and_slide()
+
+func walljump():
+	print(walljumpcounter, "pre jump")
+	if walljumpcollider.is_colliding() and walljumpcounter > -1:
+		velocity.y += wall_jump_vel
+		walljumpcounter -= 1
+		print(walljumpcounter, "post jump")
+
+func teleport(direction: Vector3):
+	if hasteleported == true: return
+	tp_reset_timer.start()
+	var transform_basis = global_transform.basis
+	var relative_direction = (transform_basis * direction).normalized()
+	var new_position = global_transform.origin + relative_direction * 5
+	global_transform.origin = new_position
+	hasteleported = true
 
 @rpc("any_peer", "call_local") func playeranimator(input_dir):
 	if gun_anim_player.current_animation == "shoot_gun":
@@ -224,3 +256,6 @@ func _on_health_regen_tick_timeout():
 	position = Vector3(1 * randi_range(-40,40), 4, 1 * randi_range(-40,40))
 	player_respawned.emit()
 	recieve_damage(-300000)
+
+func _on_tp_reset_timer_timeout():
+	hasteleported = false

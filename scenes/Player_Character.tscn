@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=19 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
@@ -61,6 +61,18 @@ tracks/0/keys = {
 "update": 0,
 "values": [Vector3(0.437763, -0.370536, -0.419771)]
 }
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Gunmesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_x1re8"]
 resource_name = "Walk_gun"
@@ -114,6 +126,8 @@ _data = {
 "Walk_gun": SubResource("Animation_x1re8"),
 "shoot_gun": SubResource("Animation_wk014")
 }
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_noo2e"]
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bfwkd"]
 lifetime_randomness = 0.5
@@ -179,6 +193,13 @@ libraries = {
 autoplay = "Idle_gun"
 playback_default_blend_time = 0.1
 
+[node name="Walljumpcollider" type="ShapeCast3D" parent="Camera3D"]
+transform = Transform3D(1.4092, 0, 0, 0, 1.2438, 0, 0, 0, 1.22602, 0, -0.726522, -0.242818)
+shape = SubResource("BoxShape3D_noo2e")
+target_position = Vector3(0, 0, 0)
+collision_mask = 254
+collide_with_areas = true
+
 [node name="DeathParticleEmitter" type="GPUParticles3D" parent="."]
 emitting = false
 amount = 80
@@ -206,6 +227,10 @@ process_callback = 0
 wait_time = 10.0
 one_shot = true
 
+[node name="TPResetTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
 [node name="Playermesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_fgofl")
 
@@ -216,3 +241,4 @@ shape = SubResource("CapsuleShape3D_tji4a")
 [connection signal="timeout" from="HealthRegenTick" to="." method="_on_health_regen_tick_timeout"]
 [connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
 [connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]
+[connection signal="timeout" from="TPResetTimer" to="." method="_on_tp_reset_timer_timeout"]
