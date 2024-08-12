@@ -10,6 +10,7 @@ extends CharacterBody3D
 @onready var respawn_timer = $RespawnTimer
 @onready var gun_anim_player = $Camera3D/Gun/GunAnimationPlayer
 @onready var gunmesh = $Camera3D/Gun/Gunmesh
+@onready var playermesh = $Playermesh
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 5.0 # Adjust this value to get the desired recoil effect
@@ -31,6 +32,7 @@ var killcount = 0
 @export var regenerated_health : int = 10
 @export var health : int = 200
 
+@export var playerragdollscene : PackedScene
 @export var gunragdollscene : PackedScene
 
 signal health_changed(health_value)
@@ -82,16 +84,17 @@ func _physics_process(delta):
 			velocity.z = move_toward(velocity.z, 0, move_speed)
 		velocity = velocity + current_recoil_velocity
 		
-		if gun_anim_player.current_animation == "shoot_gun":
-			pass
-		elif input_dir != Vector2.ZERO and is_on_floor():
-			gun_anim_player.play("Walk_gun")
-		else:
-			gun_anim_player.play("Idle_gun")
+		playeranimator.rpc(input_dir)
 		
 		move_and_slide()
 
-
+@rpc("any_peer", "call_local") func playeranimator(input_dir):
+	if gun_anim_player.current_animation == "shoot_gun":
+		pass
+	elif input_dir != Vector2.ZERO and is_on_floor():
+		gun_anim_player.play("Walk_gun")
+	else:
+		gun_anim_player.play("Idle_gun")
 
 func shoot():
 	if !is_multiplayer_authority(): return
@@ -158,10 +161,16 @@ func picked_up_health():
 
 @rpc("any_peer", "call_local") func deathfuncer():
 	gunmesh.hide()
+	playermesh.hide()
 	
 	var gunragdoll = gunragdollscene.instantiate()
+	var playerragdoll = playerragdollscene.instantiate()
+	print(self.position, " selfpos")
+	print(playerragdoll.position, " ragodll")
+	playerragdoll.position = playermesh.position
 	gunragdoll.position = gunmesh.position
 	add_child(gunragdoll)
+	add_child(playerragdoll)
 	
 	death_particle_emitter.restart()
 	death_particle_emitter.emitting = true
@@ -171,8 +180,12 @@ func picked_up_health():
 	var player_id = str(self.name)
 	player_died.emit(player_id)
 	respawn_timer.start()
+	
 	await respawn_timer.timeout
-	remove_child(gunragdoll)
+	gunragdoll.queue_free()
+	playerragdoll.queue_free()
+	#remove_child(gunragdoll)
+	#remove_child(playerragdoll)
 
 @rpc("unreliable", "any_peer", "call_local") func updatePos(id, pos):
 	if !is_multiplayer_authority():
@@ -200,10 +213,10 @@ func _on_health_regen_tick_timeout():
 	if taken_damage == false:
 		regenerate_health()
 
-
 @rpc("call_local") func _on_respawn_timer_timeout():
 	deadstatus = false
 	gunmesh.show()
+	playermesh.show()
 	position = Vector3(1 * randi_range(-40,40), 4, 1 * randi_range(-40,40))
 	player_respawned.emit()
 	recieve_damage(-300000)

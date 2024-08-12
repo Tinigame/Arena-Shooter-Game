@@ -1,7 +1,8 @@
-[gd_scene load_steps=17 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=18 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
+[ext_resource type="PackedScene" uid="uid://d4kr6ju87v02h" path="res://scenes/playerragdoll.tscn" id="2_pwxr7"]
 [ext_resource type="ArrayMesh" uid="uid://dodmnuopjr2xl" path="res://assets/models/gun.obj" id="2_t2add"]
 [ext_resource type="AudioStream" uid="uid://bfuuoetrx2pig" path="res://assets/sfx/Gunshot.mp3" id="3_r7cwy"]
 
@@ -139,6 +140,7 @@ collision_mask = 3
 floor_stop_on_slope = false
 script = ExtResource("1_n40ya")
 shooting_delay = 1.0
+playerragdollscene = ExtResource("2_pwxr7")
 gunragdollscene = ExtResource("2_lslbb")
 
 [node name="Camera3D" type="Camera3D" parent="."]
@@ -201,10 +203,10 @@ autostart = true
 
 [node name="RespawnTimer" type="Timer" parent="."]
 process_callback = 0
-wait_time = 5.0
+wait_time = 10.0
 one_shot = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Playermesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_fgofl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
