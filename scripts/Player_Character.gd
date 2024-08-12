@@ -126,7 +126,7 @@ func teleport(direction: Vector3):
 
 @rpc("any_peer", "call_local") func playeranimator(input_dir):
 	if gun_anim_player.current_animation == "shoot_gun":
-		pass
+		return
 	elif input_dir != Vector2.ZERO and is_on_floor():
 		gun_anim_player.play("Walk_gun")
 	else:
