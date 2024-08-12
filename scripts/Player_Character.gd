@@ -27,6 +27,7 @@ var gravity = 20.0
 var can_shoot = true
 var killer_id = "no-one"
 var killcount = 0
+var jumpcount = 1
 @export var shooting_delay = 0.8
 @export var default_damage : int = 50
 @export var regenerated_health : int = 10
@@ -72,8 +73,11 @@ func _physics_process(delta):
 		#Movement and camera rotation
 		if not is_on_floor():
 			velocity.y -= gravity * delta
-		if Input.is_action_just_pressed("space") and is_on_floor():
+		if Input.is_action_just_pressed("space") and jumpcount > 0:
 			velocity.y = jump_vel
+			jumpcount -= 1
+		if is_on_floor():
+			jumpcount = 1
 		var input_dir = Input.get_vector("pleft", "plright", "plup", "pldown")
 		var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 		if direction:
