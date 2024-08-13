@@ -150,13 +150,14 @@ mesh = SubResource("BoxMesh_rfc4f")
 shape = SubResource("BoxShape3D_o2gw8")
 
 [node name="DIngleobject4" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
-transform = Transform3D(7.48216, 0, 3.01263, 0, 17.8665, 0, -2.60103, 0, 8.66619, 5.09749, -3.19417, -18.2938)
+transform = Transform3D(7.48216, 0, 3.01263, 0, 17.8665, 0, -2.60103, 0, 8.66619, 5.09749, -3.19417, -26.1628)
 collision_layer = 15
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject4"]
 mesh = SubResource("BoxMesh_rfc4f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_o2gw8")
 
 [node name="DIngleobject5" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
@@ -179,16 +180,6 @@ mesh = SubResource("BoxMesh_rfc4f")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject6"]
 shape = SubResource("BoxShape3D_o2gw8")
 
-[node name="DIngleobject7" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
-transform = Transform3D(7.92137, 0, 0, 0, 17.8665, 0, 0, 0, 9.1749, 3.49553, -6.31341, 4.3707)
-collision_layer = 15
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject7"]
-mesh = SubResource("BoxMesh_rfc4f")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject7"]
-shape = SubResource("BoxShape3D_o2gw8")
-
 [node name="DIngleobject8" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
 transform = Transform3D(0.802802, -0.000252008, 9.12767, -0.940031, 17.739, 0.111047, -7.82432, -2.13122, 0.923185, -19.6085, 5.38844, -4.49187)
 collision_layer = 15
@@ -209,8 +200,69 @@ mesh = SubResource("BoxMesh_rfc4f")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject9"]
 shape = SubResource("BoxShape3D_o2gw8")
 
+[node name="DIngleobject7" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(1.34915, 0, 11.4919, 0, 31.9954, 0, -11.1946, 0, 1.38497, 5.49013, 3.90347, -2.74684)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject7"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject7"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject10" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(6.96578, 0, -4.3686, -1.57088, 16.2432, -3.36026, 3.42904, 7.44118, 7.33505, -0.312083, 5.38844, 24.029)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject10"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject10"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject11" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(7.83274, 0, -1.36865, 0, 17.8665, 0, 1.18165, 0, 9.07225, 43.6001, 4.82564, 18.4119)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject11"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject11"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject12" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(4.2649, 0, -7.73158, 0, 17.8665, 0, 6.67524, 0, 4.93979, -38.3183, 4.82564, 36.3963)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject12"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject12"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject13" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(5.6121, 0, -6.47506, 0, 17.8665, 0, 5.59039, 0, 6.50019, -38.3183, 4.82564, -32.8305)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject13"]
+transform = Transform3D(-0.00289726, 0, 0.999995, 0, 1, 0, -0.999996, 0, -0.00289708, 0, 0, 0)
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject13"]
+shape = SubResource("BoxShape3D_o2gw8")
+
+[node name="DIngleobject14" type="StaticBody3D" parent="Funnymap/Dingleobjects"]
+transform = Transform3D(0.833513, 0, -9.12397, 0, 17.8665, 0, 7.8774, 0, 0.965403, 37.5608, 4.82564, -34.915)
+collision_layer = 15
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Funnymap/Dingleobjects/DIngleobject14"]
+mesh = SubResource("BoxMesh_rfc4f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject14"]
+shape = SubResource("BoxShape3D_o2gw8")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="Funnymap"]
-transform = Transform3D(1, 0, 0, 0, -0.173648, 0.984808, 0, -0.984808, -0.173648, 0, 27.6717, 0)
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 27.6717, 0)
 shadow_enabled = true
 directional_shadow_blend_splits = true
 

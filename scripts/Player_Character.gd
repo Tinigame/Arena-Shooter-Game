@@ -15,6 +15,9 @@ extends CharacterBody3D
 @onready var walljumpcollider = $Camera3D/Walljumpcollider
 @onready var dash_cooldown = $CanvasLayer/DashCooldown
 @onready var ammocounter = $CanvasLayer/Ammocount
+@onready var melee_anim = $Camera3D/Melee/MeleeAnim
+@onready var melee_hitbox = $Camera3D/Melee/MeleeHitbox
+@onready var melee_mesh = $Camera3D/Melee/MeleeMesh
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 4.0 # Adjust this value to get the desired recoil effect
@@ -95,7 +98,9 @@ func _physics_process(delta):
 			teleport(Vector3.RIGHT)
 			
 		if Input.is_action_just_pressed("reload"):
-			reload()
+			reload.rpc()
+		if Input.is_action_just_pressed("parry"):
+			Melee()
 			
 		if is_on_floor():
 			jumpcount = 1
@@ -157,15 +162,32 @@ func shoot():
 	
 	if collision:
 		var hit_object = collision.collider
+		
 		if hit_object.is_in_group("Damageable"):
 			hit_object.set_killer.rpc_id(hit_object.get_multiplayer_authority(), name)
 			var distance = hit_object.position.distance_to(self.position)
-			
 			var damage = calcdamagefalloff(distance)
 			print(damage, " damages")
-			
 			hit_object.recieve_damage.rpc_id(hit_object.get_multiplayer_authority(), damage)
 
+func Melee():
+	MeleeAnimator.rpc()
+	print("meleed ")
+	melee_hitbox.target_position = Vector3(0, 0, 0)
+	melee_hitbox.exclude_parent = true
+	melee_hitbox.collide_with_bodies = true
+	melee_hitbox.collide_with_areas = true
+	melee_hitbox.add_exception(self)
+	if melee_hitbox.is_colliding():
+		melee_hitbox.force_shapecast_update()
+		var collision = melee_hitbox.get_collider(0)
+		if collision:
+			if collision.is_in_group("Damageable"):
+				collision.set_killer.rpc_id(collision.get_multiplayer_authority(), name)
+				collision.recieve_damage.rpc_id(collision.get_multiplayer_authority(), 100)
+				
+@rpc("any_peer", "call_local") func MeleeAnimator():
+	melee_anim.play("Melee")
 func calcdamagefalloff(distance) -> float:
 	var falloff_start_distance = 10
 	var falloff_end_distance = 40
@@ -178,7 +200,7 @@ func calcdamagefalloff(distance) -> float:
 		var t = (distance - falloff_start_distance) / (falloff_end_distance - falloff_start_distance)
 		return lerp(max_damage, min_damage, t)
 
-func reload():
+@rpc("any_peer", "call_local") func reload():
 	gun_anim_player.stop()
 	gun_anim_player.play("Reload_gun")
 	isreloading = true
@@ -231,6 +253,7 @@ func picked_up_health():
 @rpc("any_peer", "call_local") func deathfuncer():
 	gunmesh.hide()
 	playermesh.hide()
+	melee_mesh.hide()
 	
 	var gunragdoll = gunragdollscene.instantiate()
 	var playerragdoll = playerragdollscene.instantiate()
@@ -286,6 +309,7 @@ func _on_health_regen_tick_timeout():
 	deadstatus = false
 	gunmesh.show()
 	playermesh.show()
+	melee_mesh.show()
 	position = Vector3(1 * randi_range(-40,40), 4, 1 * randi_range(-40,40))
 	player_respawned.emit()
 	recieve_damage(-300000)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=29 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
@@ -75,6 +75,35 @@ tracks/1/keys = {
 "values": [Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_x5g3i"]
+resource_name = "Reload_gun"
+length = 1.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Gunmesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.437763, -0.370536, -0.419771), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.437763, -0.370536, -0.419771)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Gunmesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.35, 0.45, 0.55, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, -2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.702617, 0, 0), Vector3(-0.359137, 0, 0), Vector3(-1.318, 0, 0), Vector3(-1.97683, 0, 0), Vector3(-2.87763, 0, 0), Vector3(2.78752, 0, 0), Vector3(2.05369, 0, 0), Vector3(1.67816, 0, 0), Vector3(1.08575, 0, 0), Vector3(0.945506, 0, 0), Vector3(0.664202, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_x1re8"]
 resource_name = "Walk_gun"
 loop_mode = 1
@@ -120,35 +149,6 @@ tracks/1/keys = {
 "values": [Vector3(0.518537, 0, 0), Vector3(0, 0, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_x5g3i"]
-resource_name = "Reload_gun"
-length = 1.2
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Gunmesh:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 1.1, 1.2),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0.437763, -0.370536, -0.419771), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.437763, -0.370536, -0.419771)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Gunmesh:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.35, 0.45, 0.55, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.2),
-"transitions": PackedFloat32Array(1, -2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.702617, 0, 0), Vector3(-0.359137, 0, 0), Vector3(-1.318, 0, 0), Vector3(-1.97683, 0, 0), Vector3(-2.87763, 0, 0), Vector3(2.78752, 0, 0), Vector3(2.05369, 0, 0), Vector3(1.67816, 0, 0), Vector3(1.08575, 0, 0), Vector3(0.945506, 0, 0), Vector3(0.664202, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_chwxy"]
 _data = {
 "Idle_gun": SubResource("Animation_ew7ej"),
@@ -159,6 +159,71 @@ _data = {
 }
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_noo2e"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8ylon"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_w3ceb"]
+
+[sub_resource type="Animation" id="Animation_3golp"]
+resource_name = "Melee"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeleeMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.369485, -0.930354, 0), Vector3(-0.976979, -0.930354, -0.767176), Vector3(0.0604402, -0.930354, -0.991364), Vector3(0.725178, -0.930354, -0.588392), Vector3(-0.369485, -0.930354, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeleeMesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_ram6p"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeleeMesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(-0.369485, -0.930354, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeleeMesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yddjs"]
+_data = {
+"Melee": SubResource("Animation_3golp"),
+"RESET": SubResource("Animation_ram6p")
+}
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bfwkd"]
 lifetime_randomness = 0.5
@@ -224,7 +289,7 @@ linear_accel_max = 10.0
 
 [node name="GunAudioPlayer" type="AudioStreamPlayer" parent="Camera3D/Gun"]
 stream = ExtResource("3_r7cwy")
-volume_db = -12.0
+volume_db = -15.0
 max_polyphony = 2
 
 [node name="GunAnimationPlayer" type="AnimationPlayer" parent="Camera3D/Gun"]
@@ -240,6 +305,21 @@ shape = SubResource("BoxShape3D_noo2e")
 target_position = Vector3(0, 0, 0)
 collision_mask = 254
 collide_with_areas = true
+
+[node name="Melee" type="Node3D" parent="Camera3D"]
+
+[node name="MeleeHitbox" type="ShapeCast3D" parent="Camera3D/Melee"]
+transform = Transform3D(1.58851, 0, 0, 0, 1.27539, 0, 0, 0, 1.93896, 0, 0.540349, -1.0666)
+shape = SubResource("BoxShape3D_8ylon")
+
+[node name="MeleeMesh" type="MeshInstance3D" parent="Camera3D/Melee"]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -0.369485, -0.930354, 0)
+mesh = SubResource("BoxMesh_w3ceb")
+
+[node name="MeleeAnim" type="AnimationPlayer" parent="Camera3D/Melee"]
+libraries = {
+"": SubResource("AnimationLibrary_yddjs")
+}
 
 [node name="DeathParticleEmitter" type="GPUParticles3D" parent="."]
 emitting = false
