@@ -13,15 +13,17 @@ extends CharacterBody3D
 @onready var playermesh = $Playermesh
 @onready var tp_reset_timer = $TPResetTimer
 @onready var walljumpcollider = $Camera3D/Walljumpcollider
+@onready var dash_cooldown = $CanvasLayer/DashCooldown
+@onready var ammocounter = $CanvasLayer/Ammocount
 
 var current_recoil_velocity = Vector3.ZERO
-var recoil_force = 5.0 # Adjust this value to get the desired recoil effect
+var recoil_force = 4.0 # Adjust this value to get the desired recoil effect
 var recoil_decay = 20.0 # How quickly the recoil force decays
 
 #variables
 var recieved_damage = 0
 var move_speed = 10.0
-var jump_vel = 10.0
+var jump_vel = 9.5
 var wall_jump_vel = 12.0
 var deadstatus = false
 var taken_damage = false
@@ -32,9 +34,14 @@ var hasteleported = false
 var killer_id = "no-one"
 var killcount = 0
 var jumpcount = 1
+var isreloading = false
+@export var ammocount = 6
 var walljumpcounter = 0
+
+var max_damage = 50.0  # Damage at point-blank range
+var min_damage = 10.0  # Minimum damage at max range
+
 @export var shooting_delay = 0.8
-@export var default_damage : int = 50
 @export var regenerated_health : int = 10
 @export var health : int = 200
 
@@ -44,7 +51,6 @@ var walljumpcounter = 0
 signal health_changed(health_value)
 signal player_died
 signal player_respawned
-signal startgame
 signal teleported
 
 func _enter_tree():
@@ -65,17 +71,15 @@ func _physics_process(delta):
 	eDelta = delta
 	if is_multiplayer_authority(): 
 		if deadstatus == true: return
-		
 		apply_recoil(delta)
-		
 		#Shooting
 		if Input.is_action_pressed("Mouse1"):
-			if can_shoot:
+			if can_shoot and ammocount > 0 and !isreloading:
 				can_shoot = false
 				shoot()
 				await get_tree().create_timer(shooting_delay).timeout
 				can_shoot = true
-				emit_signal("startgame")
+		ammocounter.text = str(ammocount, " / ∞")
 		#Movement and camera rotation
 		if not is_on_floor():
 			velocity.y -= gravity * delta
@@ -90,6 +94,8 @@ func _physics_process(delta):
 		if Input.is_action_just_pressed("dashright"):
 			teleport(Vector3.RIGHT)
 			
+		if Input.is_action_just_pressed("reload"):
+			reload()
 			
 		if is_on_floor():
 			jumpcount = 1
@@ -104,37 +110,36 @@ func _physics_process(delta):
 			velocity.z = move_toward(velocity.z, 0, move_speed)
 		velocity = velocity + current_recoil_velocity
 		
-		playeranimator.rpc(input_dir)
+		playeranimator.rpc(direction)
 		
 		move_and_slide()
 
 func walljump():
-	print(walljumpcounter, "pre jump")
 	if walljumpcollider.is_colliding() and walljumpcounter > -1:
 		velocity.y += wall_jump_vel
 		walljumpcounter -= 1
-		print(walljumpcounter, "post jump")
 
 func teleport(direction: Vector3):
-	if hasteleported == true: return
-	tp_reset_timer.start()
-	var transform_basis = global_transform.basis
-	var relative_direction = (transform_basis * direction).normalized()
-	var new_position = global_transform.origin + relative_direction * 5
-	global_transform.origin = new_position
-	hasteleported = true
+	if hasteleported != true:
+		hasteleported = true
+		tp_reset_timer.start()
+		dash_cooldown.value = 0
+		var transform_basis = global_transform.basis
+		var relative_direction = (transform_basis * direction).normalized()
+		var new_position = global_transform.origin + relative_direction * 5
+		global_transform.origin = new_position
 
 @rpc("any_peer", "call_local") func playeranimator(input_dir):
-	if gun_anim_player.current_animation == "shoot_gun":
+	if gun_anim_player.is_playing() and gun_anim_player.current_animation == "shoot_gun" or "Reload_gun":
 		return
-	elif input_dir != Vector2.ZERO and is_on_floor():
+	if input_dir != Vector3.ZERO:
 		gun_anim_player.play("Walk_gun")
 	else:
 		gun_anim_player.play("Idle_gun")
 
 func shoot():
 	if !is_multiplayer_authority(): return
-	
+	ammocount -= 1
 	var space = get_world_3d().direct_space_state
 	var query = PhysicsRayQueryParameters3D.create(camera.global_position, camera.global_position - camera.global_transform.basis.z * 100)
 
@@ -154,7 +159,33 @@ func shoot():
 		var hit_object = collision.collider
 		if hit_object.is_in_group("Damageable"):
 			hit_object.set_killer.rpc_id(hit_object.get_multiplayer_authority(), name)
-			hit_object.recieve_damage.rpc_id(hit_object.get_multiplayer_authority(), default_damage)
+			var distance = hit_object.position.distance_to(self.position)
+			
+			var damage = calcdamagefalloff(distance)
+			print(damage, " damages")
+			
+			hit_object.recieve_damage.rpc_id(hit_object.get_multiplayer_authority(), damage)
+
+func calcdamagefalloff(distance) -> float:
+	var falloff_start_distance = 10
+	var falloff_end_distance = 40
+	if distance <= falloff_start_distance:
+		return max_damage
+	elif distance >= falloff_end_distance:
+		return min_damage
+	else:
+		# Linear interpolation between max_damage and min_damage
+		var t = (distance - falloff_start_distance) / (falloff_end_distance - falloff_start_distance)
+		return lerp(max_damage, min_damage, t)
+
+func reload():
+	gun_anim_player.stop()
+	gun_anim_player.play("Reload_gun")
+	isreloading = true
+	await gun_anim_player.animation_finished
+	gun_anim_player.play("RESET")
+	isreloading = false
+	ammocount = 6
 
 @rpc("any_peer", "call_local") func set_killer(killername):
 	killer_id = killername
@@ -169,6 +200,8 @@ func apply_recoil(delta):
 	gun_anim_player.play("shoot_gun")
 	gun_particles.restart()
 	gun_particles.emitting = true
+	await gun_anim_player.current_animation
+	gun_anim_player.play("Idle_gun")
 	
 @rpc("any_peer") func recieve_damage(damage_amount):
 	#print_debug(killer_id, " shot me owie for ", damage_amount, " damage")

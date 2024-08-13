@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://bjtrahwriq4km"]
+[gd_scene load_steps=23 format=3 uid="uid://bjtrahwriq4km"]
 
 [ext_resource type="Script" path="res://scripts/GameManager.gd" id="1_4i3cb"]
 [ext_resource type="Texture2D" uid="uid://dlh2pf8lf1hak" path="res://assets/sprites/moonrocks/lunar-rock-albedo.png" id="2_mrli8"]
@@ -46,9 +46,10 @@ sky = SubResource("Sky_3hl57")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.1
-ssao_enabled = true
-ssil_enabled = true
 volumetric_fog_density = 0.02
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_52o0x"]
+bg_color = Color(0.345098, 0.6, 0.6, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iueai"]
 bg_color = Color(0.36, 0, 0, 1)
@@ -217,8 +218,6 @@ directional_shadow_blend_splits = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="Funnymap"]
 environment = SubResource("Environment_nojys")
 
-[node name="Barricades" type="Node3D" parent="Funnymap"]
-
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="MainMenu" type="PanelContainer" parent="CanvasLayer"]
@@ -275,6 +274,20 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
+[node name="DashCooldown" type="ProgressBar" parent="CanvasLayer/GUI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -351.0
+offset_right = 41.0
+grow_vertical = 0
+scale = Vector2(1.48, 1)
+theme_override_styles/fill = SubResource("StyleBoxFlat_52o0x")
+value = 100.0
+fill_mode = 3
+show_percentage = false
+
 [node name="HealthBar" type="ProgressBar" parent="CanvasLayer/GUI"]
 z_index = 100
 texture_filter = 1
@@ -286,9 +299,8 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -80.0
+offset_top = -60.0
 offset_right = 200.0
-offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_horizontal = 4

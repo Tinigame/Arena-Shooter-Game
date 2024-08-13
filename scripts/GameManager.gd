@@ -5,7 +5,7 @@ extends Node
 @onready var health_bar = $CanvasLayer/GUI/HealthBar
 @onready var address_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/AdressEntry
 @onready var players = $Players
-@onready var dead_text = $CanvasLayer/GUI/CenterContainer/DeadText
+@onready var dead_text = $"CanvasLayer/GUI/Crosshair+dead/DeadText"
 @onready var funnymap = $Funnymap
 
 @export var player_spawner : PackedScene
@@ -15,8 +15,6 @@ var player_spawner_node
 var Leaderboard = {}
 var port = 25566
 var peer = ENetMultiplayerPeer.new()
-var gamestarted = false
-var leaderboarmade = false
 
 func _unhandled_input(_event):
 	if Input.is_action_just_pressed("quit"):

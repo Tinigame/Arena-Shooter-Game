@@ -1,10 +1,11 @@
-[gd_scene load_steps=19 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=24 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
 [ext_resource type="PackedScene" uid="uid://d4kr6ju87v02h" path="res://scenes/playerragdoll.tscn" id="2_pwxr7"]
 [ext_resource type="ArrayMesh" uid="uid://dodmnuopjr2xl" path="res://assets/models/gun.obj" id="2_t2add"]
 [ext_resource type="AudioStream" uid="uid://bfuuoetrx2pig" path="res://assets/sfx/Gunshot.mp3" id="3_r7cwy"]
+[ext_resource type="Script" path="res://scripts/DashCooldown.gd" id="6_bafaj"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k4pf7"]
 albedo_color = Color(1, 1, 0.372549, 1)
@@ -119,10 +120,40 @@ tracks/1/keys = {
 "values": [Vector3(0.518537, 0, 0), Vector3(0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_x5g3i"]
+resource_name = "Reload_gun"
+length = 1.2
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Gunmesh:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0.437763, -0.370536, -0.419771), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.62925, -0.370536, -0.991676), Vector3(0.437763, -0.370536, -0.419771)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Gunmesh:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.35, 0.45, 0.55, 0.65, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.2),
+"transitions": PackedFloat32Array(1, -2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0.702617, 0, 0), Vector3(-0.359137, 0, 0), Vector3(-1.318, 0, 0), Vector3(-1.97683, 0, 0), Vector3(-2.87763, 0, 0), Vector3(2.78752, 0, 0), Vector3(2.05369, 0, 0), Vector3(1.67816, 0, 0), Vector3(1.08575, 0, 0), Vector3(0.945506, 0, 0), Vector3(0.664202, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_chwxy"]
 _data = {
 "Idle_gun": SubResource("Animation_ew7ej"),
 "RESET": SubResource("Animation_i8b6r"),
+"Reload_gun": SubResource("Animation_x5g3i"),
 "Walk_gun": SubResource("Animation_x1re8"),
 "shoot_gun": SubResource("Animation_wk014")
 }
@@ -148,6 +179,15 @@ height = 0.1
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tji4a"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8crr6"]
+bg_color = Color(0.345098, 0.6, 0.6, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vwsal"]
+font_size = 26
+
+[sub_resource type="LabelSettings" id="LabelSettings_mvaic"]
+font_size = 48
+
 [node name="PlayerCharacter" type="CharacterBody3D" groups=["Damageable", "Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2136, 0)
 collision_mask = 3
@@ -164,7 +204,7 @@ fov = 90.0
 [node name="Gun" type="Node3D" parent="Camera3D"]
 
 [node name="Gunmesh" type="MeshInstance3D" parent="Camera3D/Gun"]
-transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0.437763, -0.370536, -0.419771)
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.004, 0.437763, -0.370536, -0.419771)
 mesh = ExtResource("2_t2add")
 skeleton = NodePath("../../..")
 
@@ -184,7 +224,8 @@ linear_accel_max = 10.0
 
 [node name="GunAudioPlayer" type="AudioStreamPlayer" parent="Camera3D/Gun"]
 stream = ExtResource("3_r7cwy")
-volume_db = -10.0
+volume_db = -12.0
+max_polyphony = 2
 
 [node name="GunAnimationPlayer" type="AnimationPlayer" parent="Camera3D/Gun"]
 libraries = {
@@ -194,7 +235,7 @@ autoplay = "Idle_gun"
 playback_default_blend_time = 0.1
 
 [node name="Walljumpcollider" type="ShapeCast3D" parent="Camera3D"]
-transform = Transform3D(1.4092, 0, 0, 0, 1.2438, 0, 0, 0, 1.22602, 0, -0.726522, -0.242818)
+transform = Transform3D(1.97858, 0, 0, 0, 1.2438, 0, 0, 0, 1.22602, 0, -0.726522, -0.242818)
 shape = SubResource("BoxShape3D_noo2e")
 target_position = Vector3(0, 0, 0)
 collision_mask = 254
@@ -228,6 +269,7 @@ wait_time = 10.0
 one_shot = true
 
 [node name="TPResetTimer" type="Timer" parent="."]
+process_callback = 0
 wait_time = 10.0
 one_shot = true
 
@@ -236,6 +278,47 @@ mesh = SubResource("CapsuleMesh_fgofl")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("CapsuleShape3D_tji4a")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DashCooldown" type="ProgressBar" parent="CanvasLayer"]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 13.0
+offset_top = -269.0
+offset_right = 54.0
+offset_bottom = -17.0
+grow_vertical = 0
+scale = Vector2(1.48, 1)
+theme_override_styles/fill = SubResource("StyleBoxFlat_8crr6")
+max_value = 60.0
+step = 0.1
+value = 60.0
+fill_mode = 3
+script = ExtResource("6_bafaj")
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+offset_left = 12.0
+offset_top = 767.0
+offset_right = 76.0
+offset_bottom = 803.0
+text = "Dash"
+label_settings = SubResource("LabelSettings_vwsal")
+
+[node name="Ammocount" type="Label" parent="CanvasLayer"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -369.0
+offset_top = -198.0
+offset_right = -239.0
+offset_bottom = -131.0
+grow_horizontal = 0
+grow_vertical = 0
+label_settings = SubResource("LabelSettings_mvaic")
 
 [connection signal="timeout" from="HealthRegenTimer" to="." method="_on_health_regen_timer_timeout"]
 [connection signal="timeout" from="HealthRegenTick" to="." method="_on_health_regen_tick_timeout"]
