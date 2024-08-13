@@ -157,7 +157,6 @@ collision_layer = 15
 mesh = SubResource("BoxMesh_rfc4f")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Funnymap/Dingleobjects/DIngleobject4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 shape = SubResource("BoxShape3D_o2gw8")
 
 [node name="DIngleobject5" type="StaticBody3D" parent="Funnymap/Dingleobjects"]

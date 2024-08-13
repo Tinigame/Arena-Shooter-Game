@@ -353,6 +353,10 @@ process_callback = 0
 wait_time = 10.0
 one_shot = true
 
+[node name="MeleeCooldown" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+
 [node name="Playermesh" type="MeshInstance3D" parent="."]
 mesh = SubResource("CapsuleMesh_fgofl")
 
@@ -405,3 +409,4 @@ label_settings = SubResource("LabelSettings_mvaic")
 [connection signal="timeout" from="TickTimer" to="." method="_on_tick_timer_timeout"]
 [connection signal="timeout" from="RespawnTimer" to="." method="_on_respawn_timer_timeout"]
 [connection signal="timeout" from="TPResetTimer" to="." method="_on_tp_reset_timer_timeout"]
+[connection signal="timeout" from="MeleeCooldown" to="." method="_on_melee_cooldown_timeout"]

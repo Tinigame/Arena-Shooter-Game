@@ -18,12 +18,14 @@ extends CharacterBody3D
 @onready var melee_anim = $Camera3D/Melee/MeleeAnim
 @onready var melee_hitbox = $Camera3D/Melee/MeleeHitbox
 @onready var melee_mesh = $Camera3D/Melee/MeleeMesh
+@onready var melee_cooldown = $MeleeCooldown
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 4.0 # Adjust this value to get the desired recoil effect
 var recoil_decay = 20.0 # How quickly the recoil force decays
 
 #variables
+var canmelee = true
 var recieved_damage = 0
 var move_speed = 10.0
 var jump_vel = 9.5
@@ -131,7 +133,7 @@ func teleport(direction: Vector3):
 		dash_cooldown.value = 0
 		var transform_basis = global_transform.basis
 		var relative_direction = (transform_basis * direction).normalized()
-		var new_position = global_transform.origin + relative_direction * 5
+		var new_position = global_transform.origin + relative_direction * 10
 		global_transform.origin = new_position
 
 @rpc("any_peer", "call_local") func playeranimator(input_dir):
@@ -171,20 +173,23 @@ func shoot():
 			hit_object.recieve_damage.rpc_id(hit_object.get_multiplayer_authority(), damage)
 
 func Melee():
-	MeleeAnimator.rpc()
-	print("meleed ")
-	melee_hitbox.target_position = Vector3(0, 0, 0)
-	melee_hitbox.exclude_parent = true
-	melee_hitbox.collide_with_bodies = true
-	melee_hitbox.collide_with_areas = true
-	melee_hitbox.add_exception(self)
-	if melee_hitbox.is_colliding():
-		melee_hitbox.force_shapecast_update()
-		var collision = melee_hitbox.get_collider(0)
-		if collision:
-			if collision.is_in_group("Damageable"):
-				collision.set_killer.rpc_id(collision.get_multiplayer_authority(), name)
-				collision.recieve_damage.rpc_id(collision.get_multiplayer_authority(), 100)
+	if canmelee:
+		canmelee = false
+		melee_cooldown.start()
+		MeleeAnimator.rpc()
+		print("meleed ")
+		melee_hitbox.target_position = Vector3(0, 0, 0)
+		melee_hitbox.exclude_parent = true
+		melee_hitbox.collide_with_bodies = true
+		melee_hitbox.collide_with_areas = true
+		melee_hitbox.add_exception(self)
+		if melee_hitbox.is_colliding():
+			melee_hitbox.force_shapecast_update()
+			var collision = melee_hitbox.get_collider(0)
+			if collision:
+				if collision.is_in_group("Damageable"):
+					collision.set_killer.rpc_id(collision.get_multiplayer_authority(), name)
+					collision.recieve_damage.rpc_id(collision.get_multiplayer_authority(), 100)
 				
 @rpc("any_peer", "call_local") func MeleeAnimator():
 	melee_anim.play("Melee")
@@ -316,3 +321,6 @@ func _on_health_regen_tick_timeout():
 
 func _on_tp_reset_timer_timeout():
 	hasteleported = false
+
+func _on_melee_cooldown_timeout():
+	canmelee = true
