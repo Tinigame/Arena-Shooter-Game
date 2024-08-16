@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=30 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
@@ -240,7 +240,11 @@ material = SubResource("StandardMaterial3D_ujiom")
 radius = 0.05
 height = 0.1
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vuhvv"]
+albedo_color = Color(1, 1, 0, 1)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_fgofl"]
+material = SubResource("StandardMaterial3D_vuhvv")
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_tji4a"]
 
@@ -289,7 +293,7 @@ linear_accel_max = 10.0
 
 [node name="GunAudioPlayer" type="AudioStreamPlayer" parent="Camera3D/Gun"]
 stream = ExtResource("3_r7cwy")
-volume_db = -15.0
+volume_db = -20.0
 max_polyphony = 2
 
 [node name="GunAnimationPlayer" type="AnimationPlayer" parent="Camera3D/Gun"]

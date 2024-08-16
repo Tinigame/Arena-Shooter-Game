@@ -123,6 +123,7 @@ func _physics_process(delta):
 
 func walljump():
 	if walljumpcollider.is_colliding() and walljumpcounter > -1:
+		print("we walljumpd")
 		velocity.y += wall_jump_vel
 		walljumpcounter -= 1
 

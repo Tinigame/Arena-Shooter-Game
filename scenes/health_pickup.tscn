@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://ljtqxsarjoav"]
+[gd_scene load_steps=5 format=3 uid="uid://ljtqxsarjoav"]
 
 [ext_resource type="Script" path="res://scripts/Health_pickup.gd" id="1_wvbth"]
+[ext_resource type="ArrayMesh" uid="uid://7s3w1csuvmlq" path="res://assets/models/Banana.obj" id="2_utvcp"]
 
-[sub_resource type="PrismMesh" id="PrismMesh_geo4s"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_re8oo"]
+albedo_color = Color(1, 1, 0.317647, 1)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_cf5pg"]
 
@@ -11,8 +13,10 @@ collision_layer = 6
 script = ExtResource("1_wvbth")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-mesh = SubResource("PrismMesh_geo4s")
+transform = Transform3D(0.005, 0, 0, 0, -2.18557e-10, -0.005, 0, 0.005, -2.18557e-10, -0.717634, -1.02012, -0.118732)
+mesh = ExtResource("2_utvcp")
 skeleton = NodePath("../..")
+surface_material_override/0 = SubResource("StandardMaterial3D_re8oo")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 shape = SubResource("BoxShape3D_cf5pg")

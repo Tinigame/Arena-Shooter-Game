@@ -69,8 +69,6 @@ func update_health_bar(health_value):
 	dead_text.show()
 	var playerkill = players.get_node(id).killer_id
 	print(playerkill, " killed you hahaha")
-	
-	#Leaderboard[playerkill] += 1
 	print(Leaderboard, " le leaderboarder")
 	
 	await get_tree().create_timer(5).timeout
