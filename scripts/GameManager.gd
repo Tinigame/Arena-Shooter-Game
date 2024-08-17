@@ -8,6 +8,7 @@ extends Node
 @onready var dead_text = $"CanvasLayer/GUI/Crosshair+dead/DeadText"
 @onready var funnymap = $Funnymap
 @onready var port_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/PortEntry
+@onready var mouse_sens = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/MouseSens
 
 @export var player_spawner : PackedScene
 @export var player_scene : PackedScene
@@ -48,6 +49,7 @@ func add_player(id = 1):
 	var player = player_scene.instantiate()
 	player.name = str(id) 
 	player.position = player_spawner_node.position
+	player.SetSens(str_to_var(mouse_sens.text))
 	players.add_child(player)
 	if player.is_multiplayer_authority():
 		player.player_died.connect(kill_player)

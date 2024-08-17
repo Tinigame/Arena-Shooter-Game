@@ -66,6 +66,12 @@ func _ready():
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera.current = is_multiplayer_authority()
 
+func SetSens(Sens):
+	if Sens != null:
+		MOUSE_SENSITIVITY = Sens
+	else:
+		MOUSE_SENSITIVITY = 0.003
+
 func _input(event):
 	if is_multiplayer_authority():
 		#Camera rotation
