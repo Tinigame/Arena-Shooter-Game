@@ -7,13 +7,13 @@ extends Node
 @onready var players = $Players
 @onready var dead_text = $"CanvasLayer/GUI/Crosshair+dead/DeadText"
 @onready var funnymap = $Funnymap
+@onready var port_entry = $CanvasLayer/MainMenu/MarginContainer/VBoxContainer/PortEntry
 
 @export var player_spawner : PackedScene
 @export var player_scene : PackedScene
 
 var player_spawner_node
 var Leaderboard = {}
-var port = 25566
 var peer = ENetMultiplayerPeer.new()
 
 func _unhandled_input(_event):
@@ -21,7 +21,7 @@ func _unhandled_input(_event):
 		get_tree().quit()
 
 func _on_host_button_pressed():
-	peer.create_server(port)
+	peer.create_server(str_to_var(port_entry.text))
 	multiplayer.multiplayer_peer = peer
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(del_player)
@@ -31,7 +31,7 @@ func _on_host_button_pressed():
 	gui.show()
 
 func _on_join_button_pressed():
-	peer.create_client(address_entry.text, port)
+	peer.create_client(address_entry.text, port_entry.text)
 	multiplayer.multiplayer_peer = peer
 	main_menu.hide()
 	gui.show()

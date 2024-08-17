@@ -96,6 +96,10 @@ parry={
 ]
 }
 
+[input_devices]
+
+pointing/android/enable_long_press_as_right_click=true
+
 [physics]
 
 3d/physics_engine="JoltPhysics3D"

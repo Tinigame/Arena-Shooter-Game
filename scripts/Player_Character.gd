@@ -24,6 +24,8 @@ var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 4.0 # Adjust this value to get the desired recoil effect
 var recoil_decay = 20.0 # How quickly the recoil force decays
 
+var MOUSE_SENSITIVITY = 0.003
+
 #variables
 var canmelee = true
 var recieved_damage = 0
@@ -68,8 +70,8 @@ func _input(event):
 	if is_multiplayer_authority():
 		#Camera rotation
 		if event is InputEventMouseMotion:
-			rotate_y(-event.relative.x * .005)
-			camera.rotate_x(-event.relative.y * .005)
+			rotate_y(-event.relative.x * MOUSE_SENSITIVITY)
+			camera.rotate_x(-event.relative.y * MOUSE_SENSITIVITY)
 			camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 
 func _physics_process(delta):
