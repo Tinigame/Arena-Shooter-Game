@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://brbcmknkw80lv"]
+[gd_scene load_steps=31 format=3 uid="uid://brbcmknkw80lv"]
 
 [ext_resource type="Script" path="res://scripts/Player_Character.gd" id="1_n40ya"]
 [ext_resource type="PackedScene" uid="uid://hyk77l0d3r4k" path="res://scenes/gun_ragdoll.tscn" id="2_lslbb"]
@@ -257,6 +257,9 @@ font_size = 26
 [sub_resource type="LabelSettings" id="LabelSettings_mvaic"]
 font_size = 48
 
+[sub_resource type="LabelSettings" id="LabelSettings_qvcyq"]
+font_size = 24
+
 [node name="PlayerCharacter" type="CharacterBody3D" groups=["Damageable", "Player"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2136, 0)
 collision_mask = 3
@@ -336,11 +339,12 @@ draw_pass_1 = SubResource("SphereMesh_jellc")
 
 [node name="HealthRegenTimer" type="Timer" parent="."]
 process_callback = 0
-wait_time = 5.0
+wait_time = 8.0
 one_shot = true
 
 [node name="HealthRegenTick" type="Timer" parent="."]
 process_callback = 0
+wait_time = 0.5
 
 [node name="TickTimer" type="Timer" parent="."]
 process_callback = 0
@@ -407,6 +411,28 @@ offset_bottom = -131.0
 grow_horizontal = 0
 grow_vertical = 0
 label_settings = SubResource("LabelSettings_mvaic")
+
+[node name="KillCount" type="Label" parent="CanvasLayer"]
+offset_left = 18.0
+offset_top = 18.0
+offset_right = 133.0
+offset_bottom = 52.0
+text = "Kills: 0"
+label_settings = SubResource("LabelSettings_qvcyq")
+
+[node name="CenterContainer" type="CenterContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 85.0
+offset_bottom = 85.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="KillerNameLabel" type="Label" parent="CanvasLayer/CenterContainer"]
+visible = false
+layout_mode = 2
+text = "You got naenaed by: "
 
 [connection signal="timeout" from="HealthRegenTimer" to="." method="_on_health_regen_timer_timeout"]
 [connection signal="timeout" from="HealthRegenTick" to="." method="_on_health_regen_tick_timeout"]

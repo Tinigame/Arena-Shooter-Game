@@ -19,6 +19,8 @@ extends CharacterBody3D
 @onready var melee_hitbox = $Camera3D/Melee/MeleeHitbox
 @onready var melee_mesh = $Camera3D/Melee/MeleeMesh
 @onready var melee_cooldown = $MeleeCooldown
+@onready var killer_name_label: Label = $CanvasLayer/CenterContainer/KillerNameLabel
+@onready var kill_count: Label = $CanvasLayer/KillCount
 
 var current_recoil_velocity = Vector3.ZERO
 var recoil_force = 4.0 # Adjust this value to get the desired recoil effect
@@ -46,7 +48,7 @@ var isreloading = false
 var walljumpcounter = 0
 
 var max_damage = 50.0  # Damage at point-blank range
-var min_damage = 10.0  # Minimum damage at max range
+var min_damage = 25.0  # Minimum damage at max range
 
 @export var shooting_delay = 0.8
 @export var regenerated_health : int = 10
@@ -58,7 +60,7 @@ var min_damage = 10.0  # Minimum damage at max range
 signal health_changed(health_value)
 signal player_died
 signal player_respawned
-signal teleported
+#signal teleported
 
 func _enter_tree():
 	set_multiplayer_authority(name.to_int())
@@ -180,6 +182,7 @@ func shoot():
 			var damage = calcdamagefalloff(distance)
 			print(damage, " damages")
 			hit_object.recieve_damage.rpc_id(hit_object.get_multiplayer_authority(), damage)
+			hit_object.on_hit.rpc()
 
 func Melee():
 	if canmelee:
@@ -269,6 +272,9 @@ func picked_up_health():
 	playermesh.hide()
 	melee_mesh.hide()
 	
+	killer_name_label.text = str("You got naenaed by: ", killer_id)
+	killer_name_label.show()
+	
 	var gunragdoll = gunragdollscene.instantiate()
 	var playerragdoll = playerragdollscene.instantiate()
 	print(self.position, " selfpos")
@@ -321,6 +327,8 @@ func _on_health_regen_tick_timeout():
 
 @rpc("call_local") func _on_respawn_timer_timeout():
 	deadstatus = false
+	ammocount = 6
+	killer_name_label.hide()
 	gunmesh.show()
 	playermesh.show()
 	melee_mesh.show()
@@ -333,3 +341,11 @@ func _on_tp_reset_timer_timeout():
 
 func _on_melee_cooldown_timeout():
 	canmelee = true
+
+@rpc("any_peer", "call_local") func on_hit():
+	death_particle_emitter.restart()
+	death_particle_emitter.emitting = true
+
+func add_kill():
+	killcount += 1
+	kill_count.text = str("Kills: ", killcount)

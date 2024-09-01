@@ -58,8 +58,6 @@ sky = SubResource("Sky_3hl57")
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 ambient_light_energy = 0.1
-ssao_enabled = true
-ssil_enabled = true
 volumetric_fog_density = 0.02
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c46ty"]
@@ -517,11 +515,16 @@ alignment = 1
 [node name="Label2" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = " Enter port to host. Address + port to join"
+horizontal_alignment = 1
 
 [node name="MouseSens" type="LineEdit" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
 layout_mode = 2
 placeholder_text = "Mouse sensitivity (0.003 works well)"
 alignment = 1
+
+[node name="Label3" type="Label" parent="CanvasLayer/MainMenu/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Btw the dash bar doesnt work atall. sometimes it does idk its inconsistent"
 
 [node name="GUI" type="Control" parent="CanvasLayer"]
 visible = false

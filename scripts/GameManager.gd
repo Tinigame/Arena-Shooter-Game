@@ -32,7 +32,7 @@ func _on_host_button_pressed():
 	gui.show()
 
 func _on_join_button_pressed():
-	peer.create_client(address_entry.text, port_entry.text)
+	peer.create_client(address_entry.text, int(port_entry.text))
 	multiplayer.multiplayer_peer = peer
 	main_menu.hide()
 	gui.show()
@@ -67,11 +67,14 @@ func update_health_bar(health_value):
 	clampi(health_value, 0, 200)
 	health_bar.value = health_value
 
-@rpc("any_peer", "call_local") func kill_player(id):
+func kill_player(id):
 	dead_text.show()
 	var playerkill = players.get_node(id).killer_id
 	print(playerkill, " killed you hahaha")
 	print(Leaderboard, " le leaderboarder")
+	
+	var killer = players.get_node(str(playerkill))
+	killer.add_kill()
 	
 	await get_tree().create_timer(5).timeout
 	dead_text.hide()
